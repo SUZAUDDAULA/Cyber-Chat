@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "717165866578",
+    "firebase_url": "https://messagebox-1dcaa.firebaseio.com",
+    "project_id": "messagebox-1dcaa",
+    "storage_bucket": "messagebox-1dcaa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717165866578:android:b240025ccb10b0a713398b",
+        "android_client_info": {
+          "package_name": "com.opus_bd.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717165866578-ptni4vfdf9pcavmg4ejc793g49culsfn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOj7BdnxSb8uk4RMs95Jrz8702EmoGr1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717165866578-ptni4vfdf9pcavmg4ejc793g49culsfn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
