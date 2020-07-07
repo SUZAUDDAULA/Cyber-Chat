@@ -2,6 +2,7 @@ package com.opus_bd.myapplication.APIClient;
 
 import com.opus_bd.myapplication.Model.Group.GroupPost;
 import com.opus_bd.myapplication.Model.User.DesignationModel;
+import com.opus_bd.myapplication.Model.User.EmployeeUserModel;
 import com.opus_bd.myapplication.Model.User.RegisterModel;
 import com.opus_bd.myapplication.Model.User.SubUnitsModel;
 import com.opus_bd.myapplication.Model.User.UnitModel;
@@ -23,8 +24,10 @@ public interface RetrofitService {
     @POST("api/Auth/login")
     Call<UserModel> login(@Body UserLoginModel userLoginModel);
 
-    @GET("api/Message/GetEmployeeInfoExceptMe/{userId}")
-    Call<List<UserListModel>> GetEmployeeInfoExceptMe(@Path("userId") int userId);
+  /*  @GET("api/Message/GetEmployeeInfoExceptMe/{userId}")
+    Call<List<UserListModel>> GetEmployeeInfoExceptMe(@Path("userId") int userId);*/
+  @GET("api/Message/GetEmployeeInfoExceptMe/{userId}")
+  Call<List<UserListModel>> GetEmployeeInfoExceptMe(@Path("userId") int userId);
 
     @GET("api/Message/GetGroupsForMe/{userId}")
     Call<List<UserModel>> GetGroupsForMe(@Path("userId") int userId);

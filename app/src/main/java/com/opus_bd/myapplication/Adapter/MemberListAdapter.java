@@ -78,6 +78,8 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Tr
         Button btnSendMessage;*/
         @BindView(R.id.rootLayout)
         LinearLayout rootLayout;
+        @BindView(R.id.description)
+        TextView description;
 
 
         public TransactionViewHolder(View itemView) {
@@ -88,13 +90,14 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Tr
         public void set(final UserListModel item) {
             //UI setting code
 
-            tvProfileName.setText(String.valueOf(item.getName()));
+            tvProfileName.setText(String.valueOf(item.getEmpName()));
+            description.setText(String.valueOf(item.getDesignationName()));
             try{
                 Glide.with(context)
                         .applyDefaultRequestOptions(new RequestOptions()
                                 .placeholder(R.drawable.ic_person)
                                 .error(R.drawable.ic_person))
-                        .load(Constants.BASE_URL +item.getEmpPhoto())
+                        .load(Constants.BASE_URL +item.getCompanyName())
                         .into(ivUserImage);
             }
             catch (Exception e){}
@@ -104,10 +107,10 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Tr
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ChatActivity.class);
-                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_ID, item.getId());
+                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_ID, item.getUserId());
                     Utilities.showLogcatMessage(" USER ID"+item.getId());
-                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_NAME, item.getName());
-                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_PHOTO, item.getEmpPhoto());
+                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_NAME, item.getEmpName());
+                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_PHOTO, item.getCompanyName());
                     context.startActivity(intent);
                 }
             });
@@ -138,7 +141,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Tr
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (UserListModel item : userListModelFiltered) {
-                    if (item.getName().toLowerCase().contains(filterPattern)) {
+                    if (item.getEmpName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
