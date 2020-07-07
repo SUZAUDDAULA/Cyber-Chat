@@ -141,7 +141,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Tr
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (UserListModel item : userListModelFiltered) {
-                    if (item.getEmpName().toLowerCase().contains(filterPattern)) {
+                    if (item.getEmpName().toLowerCase().contains(filterPattern) || item.getDesignationName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }

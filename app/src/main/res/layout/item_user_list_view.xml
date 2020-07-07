@@ -18,7 +18,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-
+            android:src="@drawable/ic_human_db"
             app:civ_border="false"
             app:civ_shadow="true"
 
