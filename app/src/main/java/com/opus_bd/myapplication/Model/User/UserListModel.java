@@ -36,7 +36,7 @@ public class UserListModel {
     private Integer employeeId;
     @SerializedName("DivisionName")
     @Expose
-    private Object divisionName;
+    private String divisionName;
     @SerializedName("DesignationName")
     @Expose
     private String designationName;
@@ -48,7 +48,7 @@ public class UserListModel {
     private String companyName;
     @SerializedName("departmentName")
     @Expose
-    private Object departmentName;
+    private String departmentName;
     @SerializedName("empType")
     @Expose
     private Object empType;
@@ -160,11 +160,11 @@ public class UserListModel {
         this.employeeId = employeeId;
     }
 
-    public Object getDivisionName() {
+    public String getDivisionName() {
         return divisionName;
     }
 
-    public void setDivisionName(Object divisionName) {
+    public void setDivisionName(String divisionName) {
         this.divisionName = divisionName;
     }
 
@@ -192,11 +192,11 @@ public class UserListModel {
         this.companyName = companyName;
     }
 
-    public Object getDepartmentName() {
+    public String getDepartmentName() {
         return departmentName;
     }
 
-    public void setDepartmentName(Object departmentName) {
+    public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
 

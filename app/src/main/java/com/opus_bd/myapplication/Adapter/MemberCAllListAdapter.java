@@ -88,14 +88,14 @@ public class MemberCAllListAdapter extends RecyclerView.Adapter<MemberCAllListAd
 
         public void set(final UserListModel item) {
             //UI setting code
-            description.setText(String.valueOf(item.getDesignationName()));
+            description.setText(String.valueOf(item.getCompanyName()));
             tvProfileName.setText(String.valueOf(item.getEmpName()));
             try{
                 Glide.with(context)
                         .applyDefaultRequestOptions(new RequestOptions()
                                 .placeholder(R.drawable.ic_person)
                                 .error(R.drawable.ic_person))
-                        .load(Constants.BASE_URL +item.getCompanyName())
+                        .load(Constants.BASE_URL +item.getDivisionName())
                         .into(ivUserImage);
             }
             catch (Exception e){}
@@ -108,7 +108,7 @@ public class MemberCAllListAdapter extends RecyclerView.Adapter<MemberCAllListAd
                     intent.putExtra(ChatActivity.EXTRA_RECEIVER_ID, item.getUserId());
                     Utilities.showLogcatMessage(" USER ID"+item.getId());
                     intent.putExtra(ChatActivity.EXTRA_RECEIVER_NAME, item.getEmpName());
-                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_PHOTO, item.getCompanyName());
+                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_PHOTO, item.getDivisionName());
                     context.startActivity(intent);
                 }
             });
@@ -142,7 +142,7 @@ public class MemberCAllListAdapter extends RecyclerView.Adapter<MemberCAllListAd
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (UserListModel item : userListModelFiltered) {
-                    if (item.getEmpName().toLowerCase().contains(filterPattern) || item.getDesignationName().toLowerCase().contains(filterPattern)) {
+                    if (item.getEmpName().toLowerCase().contains(filterPattern) || item.getCompanyName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }

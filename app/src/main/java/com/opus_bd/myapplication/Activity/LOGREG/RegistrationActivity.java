@@ -4,12 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.opus_bd.myapplication.APIClient.RetrofitClientInstance;
 import com.opus_bd.myapplication.APIClient.RetrofitService;
 import com.opus_bd.myapplication.Activity.LoginActivity;
@@ -53,14 +58,16 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText etPassword;
     @BindView(R.id.etConfirmPassWord)
     EditText etConfirmPassWord;
-
+    @BindView(R.id.ivpassShow)
+    ImageView ivpassShow;
+    boolean isPassChecked = true;
 
     ArrayList<UnitModel> unitModelArrayList = new ArrayList<>();
     ArrayList<SubUnitsModel> subUnitsModelArrayList = new ArrayList<>();
     ArrayList<DesignationModel> designationModelArrayList = new ArrayList<>();
 
-    public Integer SELECTED_UNIT_ID,SELECTED_SUB_UNIT_ID;
-    String selectOne,SELECTED_DESIGNATION_NAME;
+    public Integer SELECTED_UNIT_ID,SELECTED_SUB_UNIT_ID=null;
+    String selectOne,SELECTED_DESIGNATION_NAME="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +108,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void addAllUnitSpinnerData(final List<UnitModel> body) {
         List<String> arrayList = new ArrayList<>();
-        arrayList.add(0, selectOne);
+        arrayList.add(0, "Select Unit");
         for (int i = 0; i < body.size(); i++) {
             arrayList.add(i + 1, body.get(i).getBranchUnitName());
         }
@@ -155,7 +162,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void addAllSubUnitSpinnerData(final List<SubUnitsModel> body) {
         List<String> arrayList = new ArrayList<>();
-        arrayList.add(0, selectOne);
+        arrayList.add(0, "Select Sub-Unit");
         for (int i = 0; i < body.size(); i++) {
             arrayList.add(i + 1, body.get(i).getName());
         }
@@ -209,9 +216,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void addAllDesignationSpinnerData(final List<DesignationModel> body) {
         List<String> arrayList = new ArrayList<>();
-        arrayList.add(0, selectOne);
+        arrayList.add(0, "Select Rank");
         for (int i = 0; i < body.size(); i++) {
-            arrayList.add(i + 1, body.get(i).getDesignationName());
+            arrayList.add(i + 1, body.get(i).getDesignationNameBN());
         }
 
         CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), arrayList);
@@ -221,7 +228,7 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     if (i >= 1) {
-                        SELECTED_DESIGNATION_NAME = body.get(i - 1).getDesignationName();
+                        SELECTED_DESIGNATION_NAME = body.get(i - 1).getDesignationNameBN();
                     } else {
                         SELECTED_DESIGNATION_NAME = "";
                     }
@@ -237,9 +244,14 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-
-
     @OnClick(R.id.btnNext1)
+    public void Register() {
+        if (!validatedForm())
+            return;
+        submitToServer();
+    }
+
+
     public void submitToServer() {
 
         final RegisterModel registrationModel = new RegisterModel();
@@ -263,8 +275,10 @@ public class RegistrationActivity extends AppCompatActivity {
                 try {
                     if (response.body() != null) {
                         try {
+                            RegisterSuccessActivity.code = etBPNo.getText().toString();
                             Intent intent = new Intent(RegistrationActivity.this, RegisterSuccessActivity.class);
                             startActivity(intent);
+                            finish();
                         } catch (Exception e) {
                             Utilities.showLogcatMessage("Exception 1" + e.toString());
                             Toast.makeText(RegistrationActivity.this, "Something went Wrong! Please try again later", Toast.LENGTH_SHORT).show();
@@ -290,5 +304,64 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
+
+    private boolean validatedForm() {
+        if (TextUtils.isEmpty(etNAME.getText().toString())) {
+            etNAME.setError(getResources().getString(R.string.field_null_error));
+            Toast.makeText(this, "Name field can not be empty!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (TextUtils.isEmpty(etBPNo.getText().toString())) {
+            etBPNo.setError(getResources().getString(R.string.field_null_error));
+            Toast.makeText(this, "BP No field can not be empty!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (SELECTED_UNIT_ID==null) {
+            Toast.makeText(this, "Unit field can not be empty!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (SELECTED_SUB_UNIT_ID==null) {
+            Toast.makeText(this, "Sub-Unit field can not be empty!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (TextUtils.isEmpty(SELECTED_DESIGNATION_NAME)) {
+            Toast.makeText(this, "Rank field can not be empty!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (TextUtils.isEmpty(etEmail.getText().toString())) {
+            etEmail.setError(getResources().getString(R.string.field_null_error));
+            Toast.makeText(this, "Email field can not be empty!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (TextUtils.isEmpty(etPhn.getText().toString())) {
+            etPhn.setError(getResources().getString(R.string.field_null_error));
+            Toast.makeText(this, "Phone field can not be empty!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (TextUtils.isEmpty(etPassword.getText().toString())) {
+            etPassword.setError(getResources().getString(R.string.field_null_error));
+            Toast.makeText(this, "Password field can not be empty!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (TextUtils.isEmpty(etConfirmPassWord.getText().toString())) {
+            etConfirmPassWord.setError(getResources().getString(R.string.field_null_error));
+            Toast.makeText(this, "Confirm Password field can not be empty!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @OnClick(R.id.ivpassShow)
+    public void Passwordshow() {
+
+        if (isPassChecked) {
+            // show password
+            etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            etConfirmPassWord.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            Glide.with(this).load(R.drawable.ic_visibility_off).into(ivpassShow);
+            isPassChecked = false;
+        } else {
+            // hide password
+            etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            etConfirmPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            Glide.with(this).load(R.drawable.ic_view).into(ivpassShow);
+            isPassChecked = true;
+        }
+    }
+
 
 }

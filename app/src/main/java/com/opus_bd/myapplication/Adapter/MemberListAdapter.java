@@ -91,7 +91,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Tr
             //UI setting code
 
             tvProfileName.setText(String.valueOf(item.getEmpName()));
-            description.setText(String.valueOf(item.getDesignationName()));
+            description.setText(String.valueOf(item.getCompanyName()));
             try{
                 Glide.with(context)
                         .applyDefaultRequestOptions(new RequestOptions()
@@ -110,7 +110,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Tr
                     intent.putExtra(ChatActivity.EXTRA_RECEIVER_ID, item.getUserId());
                     Utilities.showLogcatMessage(" USER ID"+item.getId());
                     intent.putExtra(ChatActivity.EXTRA_RECEIVER_NAME, item.getEmpName());
-                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_PHOTO, item.getCompanyName());
+                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_PHOTO, item.getDivisionName());
                     context.startActivity(intent);
                 }
             });
@@ -141,7 +141,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Tr
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (UserListModel item : userListModelFiltered) {
-                    if (item.getEmpName().toLowerCase().contains(filterPattern) || item.getDesignationName().toLowerCase().contains(filterPattern)) {
+                    if (item.getEmpName().toLowerCase().contains(filterPattern) || item.getCompanyName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
