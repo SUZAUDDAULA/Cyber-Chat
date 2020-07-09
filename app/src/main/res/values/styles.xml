@@ -38,4 +38,11 @@
     <style name="RippleStyleBlack" parent="RippleStyleWhite">
         <item name="mrl_rippleColor">#8096989A</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="NoActionBar" >
+        <item name="windowActionBar">false</item>
+    </style>
+    <style name="AppTheme.PopupOverlay" parent="NoActionBar"></style>
+
+
 </resources>

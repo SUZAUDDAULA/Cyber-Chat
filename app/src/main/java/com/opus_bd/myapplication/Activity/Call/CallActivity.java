@@ -4,14 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.opus_bd.myapplication.Activity.VoiceCall.Apps;
 import com.opus_bd.myapplication.R;
 import com.opus_bd.myapplication.Utils.Voicecall;
 import com.sinch.android.rtc.PushPair;
@@ -20,10 +23,10 @@ import com.sinch.android.rtc.SinchClient;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallListener;
 
-import java.util.List;
 
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 
 public class CallActivity extends AppCompatActivity {
     public static final int RequestPermissionCode = 1;
@@ -44,6 +47,18 @@ public class CallActivity extends AppCompatActivity {
         sinchClient.setSupportCalling(true);
         sinchClient.startListeningOnActiveConnection();
         sinchClient.start();
+
+        Log.i("dfdw52421", Apps.USER_ID);
+        Log.i("dfdw52422", String.valueOf(Apps.sinchClient.isStarted()));
+
+        startService(new Intent(this, SinchService.class));
+        if(Apps.callClient!=null&&Apps.sinchClient.isStarted()){
+
+            Log.i("dfdw5242199", "Client Connected, ready to use!");
+
+        }
+
+
         if(checkSinchPermission()) {
 
             Button button = (Button) findViewById(R.id.button);
@@ -85,6 +100,11 @@ public class CallActivity extends AppCompatActivity {
             callState.setText("onCallEnded");
         }
 
+        @java.lang.Override
+        public void onShouldSendPushNotification(Call call, java.util.List<PushPair> list) {
+
+        }
+
         @Override
         public void onCallEstablished(Call establishedCall) {
             //incoming call was picked up
@@ -100,10 +120,11 @@ public class CallActivity extends AppCompatActivity {
             //call is ringing
         }
 
-        @Override
+        /*@Override
         public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
             //don't worry about this right now
-        }
+        }*/
+
     }
 
     private void requestPermission() {
