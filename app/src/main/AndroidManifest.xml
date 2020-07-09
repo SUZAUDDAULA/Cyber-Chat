@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
+        android:name=".Activity.VoiceCall.Apps"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_cc"
         android:label="@string/app_launcher_name"
@@ -22,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.LOGREG.RegisterSuccessActivity"></activity>
+        <activity android:name=".Activity.LOGREG.RegisterSuccessActivity" />
         <activity android:name=".Activity.LOGREG.RegistrationActivity" />
         <activity android:name=".Activity.EmoActivity" />
         <activity android:name=".Activity.Call.PlaceCallActivity" />
@@ -35,6 +36,7 @@
             android:name=".Activity.HomeActivity"
             android:theme="@style/NoActionBar" />
         <activity android:name=".Activity.Call.CallActivity" />
+        <activity android:name=".Activity.VoiceCall.IncommingCallActivity" />
         <activity android:name=".Activity.GroupActivity" />
         <activity android:name=".Activity.LoginActivity" />
         <activity android:name=".Activity.SplashActivity">

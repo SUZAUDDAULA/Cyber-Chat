@@ -59,13 +59,14 @@
             android:layout_width="wrap_content"
             android:layout_marginRight="110dp"
             android:layout_height="wrap_content">
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:layout_centerInParent="true"
                 android:layout_marginRight="110dp"
-
                 android:src="#28B463"/>
+
             <Button
                 android:id="@+id/answerButton"
                 android:layout_width="30dp"
@@ -87,7 +88,6 @@
                 android:layout_height="55dp"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="110dp"
-
                 android:src="#CB4335"/>
             <Button
                 android:id="@+id/declineButton"

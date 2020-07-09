@@ -1,19 +1,21 @@
 package com.opus_bd.myapplication.Activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -39,12 +41,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.opus_bd.myapplication.Activity.Call.PlaceCallActivity;
+import com.opus_bd.myapplication.Activity.Call.SinchService;
+import com.opus_bd.myapplication.Activity.VoiceCall.Apps;
+import com.opus_bd.myapplication.Activity.VoiceCall.IncommingCallActivity;
+import com.opus_bd.myapplication.Activity.VoiceCall.SinchStatus;
 import com.opus_bd.myapplication.Adapter.ChatAdapter;
 import com.opus_bd.myapplication.Model.IndividualChatModel;
-import com.opus_bd.myapplication.Model.User.UserModel;
 import com.opus_bd.myapplication.R;
 import com.opus_bd.myapplication.Utils.Constants;
 import com.opus_bd.myapplication.Utils.SharedPrefManager;
+import com.sinch.android.rtc.calling.Call;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -52,11 +61,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
-import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -94,13 +100,27 @@ public class ChatActivity extends AppCompatActivity {
 
         rootLayout.setBackground(getResources().getDrawable(R.drawable.img_chat_background));
         Bundle bundle = getIntent().getExtras();
+
         if (bundle != null) {
             receiverId = bundle.getInt(EXTRA_RECEIVER_ID);
             name = bundle.getString(EXTRA_RECEIVER_NAME);
             photo = bundle.getString(EXTRA_RECEIVER_PHOTO);
-
         }
+
+        Log.i("dfdw5242166", Apps.USER_ID);
+        Log.i("dfdw5242288", String.valueOf(Apps.sinchClient.isStarted()));
+
+        /*startService(new Intent(this, SinchService.class));*/
+
+        startService(new Intent(this, SinchService.class));
+
+        if(Apps.callClient!=null&&Apps.sinchClient.isStarted()){
+            Log.i("dfdw524219900", "Client Connected, ready to use!");
+        }
+
+
         tvProfileName.setText(name);
+
         try {
             Glide.with(this)
                     .applyDefaultRequestOptions(new RequestOptions()
@@ -117,7 +137,6 @@ public class ChatActivity extends AppCompatActivity {
     private void initToolbar() {
         //toolbar.setNavigationIcon(R.drawable.app_logo);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Tools.setSystemBarColor(this);
     }
@@ -283,8 +302,10 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemCall:
-                Toast.makeText(getApplicationContext(), "Call",
-                        Toast.LENGTH_SHORT).show();
+                if(Apps.callClient==null){
+                    Log.i("df335353535","Sinch Client not connected");
+                }
+                customDialog();
                 return true;
             case R.id.itemVideo:
                 CallONCLick();
@@ -304,5 +325,72 @@ public class ChatActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void customDialog() {
+
+        final Dialog dialog = new Dialog(ChatActivity.this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(R.layout.dialog_input_patner_id);
+
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        //wlp.horizontalWeight=3;
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        EditText etPartnerID = (EditText) dialog.findViewById(R.id.input_partner_id);
+        Button btnPartnerID = (Button) dialog.findViewById(R.id.btnPatner);
+        btnPartnerID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(etPartnerID.getText().toString().isEmpty() || etPartnerID.getText().toString().length() < 9){
+                    etPartnerID.setError("ID not valid");
+                    return;
+                }
+                else {
+                    dialog.dismiss();
+                    Call currentcall = Apps.callClient.callUser(etPartnerID.getText().toString());
+                    Intent callscreen = new Intent(ChatActivity.this, IncommingCallActivity.class);
+                    callscreen.putExtra("callid", currentcall.getCallId());
+                    callscreen.putExtra("incomming", false);
+                    callscreen.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(callscreen);
+                }
+            }
+        });
+
+        dialog.show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSinchConnected(SinchStatus.SinchConnected sinchConnected){
+        Log.i("Status111","* CONNECTED :)\n---------------------------\n");
+
+        /*mMainCallbtn.setEnabled(true);*/
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSinchDisconnected(SinchStatus.SinchDisconnected sinchDisconnected){
+
+        Log.i("Status2222","* DISCONNECTED\n---------------------------\n");
+
+        /*mMainStatus.append(String.format("* DISCONNECTED\n---------------------------\n"));
+        mMainCallbtn.setEnabled(false);*/
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSinchFailed(SinchStatus.SinchFailed sinchFailed){
+        Log.i("Status3333","* CONNECTION FAILED: %s\n---------------------------\n"+sinchFailed.error.getMessage());
+
+        /*mMainStatus.append(String.format("* CONNECTION FAILED: %s\n---------------------------\n", sinchFailed.error.getMessage()));
+        mMainCallbtn.setEnabled(false);*/
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSinchLogging(SinchStatus.SinchLogger sinchLogger){
+
+        Log.i("Status44","* %s ** %s ** %s\n---------------------------\n"+ " " +sinchLogger.message + " "+ sinchLogger.area +" "+ sinchLogger.level);
+
+        /*mMainStatus.append(String.format("* %s ** %s ** %s\n---------------------------\n", sinchLogger.message, sinchLogger.area, sinchLogger.level));*/
     }
 }
