@@ -2,19 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="10dp"
     android:orientation="vertical">
 
-   <EditText
-       android:layout_width="match_parent"
-       android:id="@+id/input_partner_id"
-       android:inputType="number"
-       android:hint="Enter Partner ID"
-       android:layout_height="wrap_content">
-   </EditText>
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/input_partner_id"
+        android:inputType="number"
+        android:hint="Enter Partner ID"
+        android:layout_height="wrap_content">
+    </TextView>
+
     <Button
         android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
         android:id="@+id/btnPatner"
-        android:text="Submit"
+        android:text="Ok"
         android:textColor="@color/white"
         android:background="@color/colorAccent"
         android:layout_height="wrap_content">
