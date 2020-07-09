@@ -142,7 +142,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        showProgressBar(true);
+        showProgressBar(false);
         chatAdapter = new ChatAdapter(individualChatModels, this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -209,6 +209,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void showProgressBar(boolean visible) {
+
         if (visible) {
             progressbar.setVisibility(View.VISIBLE);
             rootLayout.setAlpha(Constants.PROGRESSBAR_ALPHA);
@@ -315,7 +316,8 @@ public class ChatActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.itemNewGroup:
-                Toast.makeText(getApplicationContext(), "New Group", Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(getApplicationContext(), "New Group", Toast.LENGTH_SHORT).show();*/
+                myID();
                 return true;
             case R.id.itemLogOut:
                 Intent intent = new Intent(ChatActivity.this, LoginActivity.class);
@@ -327,6 +329,32 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    public void myID() {
+
+        final Dialog dialog = new Dialog(ChatActivity.this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(R.layout.dialog_input_patner);
+
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        //wlp.horizontalWeight=3;
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        TextView etPartnerID = (TextView) dialog.findViewById(R.id.input_partner_id);
+        etPartnerID.setText(Apps.USER_ID);
+        Button btnPartnerID = (Button) dialog.findViewById(R.id.btnPatner);
+        btnPartnerID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
     public void customDialog() {
 
         final Dialog dialog = new Dialog(ChatActivity.this);
@@ -346,7 +374,7 @@ public class ChatActivity extends AppCompatActivity {
         btnPartnerID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(etPartnerID.getText().toString().isEmpty() || etPartnerID.getText().toString().length() < 9){
+                if(etPartnerID.getText().toString().isEmpty()){
                     etPartnerID.setError("ID not valid");
                     return;
                 }
