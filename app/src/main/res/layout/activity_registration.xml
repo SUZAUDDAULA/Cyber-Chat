@@ -139,6 +139,8 @@
                             android:layout_toRightOf="@id/vBPNo"
                             android:background="@android:color/white"
                             android:hint="BP No"
+                            android:inputType="number"
+                            android:maxLength="10"
                             android:paddingStart="10dp"
                             android:paddingLeft="10dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
@@ -357,7 +359,7 @@
                             android:layout_toRightOf="@id/vPhn"
                             android:background="@android:color/white"
                             android:hint="Phone"
-                            android:inputType="phone"
+                            android:inputType="number"
                             android:maxLength="11"
                             android:paddingStart="10dp"
                             android:paddingLeft="10dp"

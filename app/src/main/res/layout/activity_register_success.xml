@@ -24,9 +24,18 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:gravity="center_horizontal"
-            android:text="@string/entry_code"
+            android:text="@string/entry_code2"
             android:textColor="@color/blue_600"
             android:textSize="28dp" />
+
+        <TextView
+            android:id="@+id/tvCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/blue_600"
+            android:textSize="15dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -34,6 +43,7 @@
             android:layout_margin="15dp"
             android:gravity="center_horizontal"
             android:text="@string/entry_code2"
+            android:visibility="gone"
             android:textColor="@color/blue_600"
             android:textSize="18dp" />   <TextView
         android:layout_width="match_parent"

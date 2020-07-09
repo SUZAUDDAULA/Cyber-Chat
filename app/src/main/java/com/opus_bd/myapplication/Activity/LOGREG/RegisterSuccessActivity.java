@@ -14,10 +14,15 @@ import com.opus_bd.myapplication.R;
 
 public class RegisterSuccessActivity extends AppCompatActivity {
     Button btnThanks;
+    public static String code;
+    TextView tvCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_success);
+
+        tvCode = (TextView) findViewById(R.id.tvCode);
+        tvCode.setText("Note: Your UserID is BP No : "+code);
         btnThanks = (Button) findViewById(R.id.btnThanks);
         btnThanks.setOnClickListener(new View.OnClickListener() {
             @Override

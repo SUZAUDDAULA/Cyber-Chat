@@ -3,15 +3,21 @@ package com.opus_bd.myapplication.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.opus_bd.myapplication.APIClient.RetrofitClientInstance;
 import com.opus_bd.myapplication.APIClient.RetrofitService;
 import com.opus_bd.myapplication.Activity.LOGREG.RegistrationActivity;
@@ -40,6 +46,15 @@ public class LoginActivity extends AppCompatActivity {
     ProgressBar progressbar;
     @BindView(R.id.rootLayout)
     LinearLayout rootLayout;
+    @BindView(R.id.ivpassShow)
+    ImageView ivpassShow;
+
+    boolean isPassChecked = true;
+//    private String username,password;
+//    private CheckBox saveLoginCheckBox;
+//    private SharedPreferences loginPreferences;
+//    private SharedPreferences.Editor loginPrefsEditor;
+//    private Boolean saveLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +171,22 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.ivpassShow)
+    public void Passwordshow() {
+
+        if (isPassChecked) {
+            // show password
+            etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            Glide.with(this).load(R.drawable.ic_visibility_off).into(ivpassShow);
+            isPassChecked = false;
+        } else {
+            // hide password
+            etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            Glide.with(this).load(R.drawable.ic_view).into(ivpassShow);
+            isPassChecked = true;
+        }
     }
 
 }
