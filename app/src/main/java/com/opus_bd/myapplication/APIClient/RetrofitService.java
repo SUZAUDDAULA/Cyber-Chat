@@ -3,6 +3,7 @@ package com.opus_bd.myapplication.APIClient;
 import com.opus_bd.myapplication.Model.Group.GroupPost;
 import com.opus_bd.myapplication.Model.User.DesignationModel;
 import com.opus_bd.myapplication.Model.User.EmployeeUserModel;
+import com.opus_bd.myapplication.Model.User.RankModel;
 import com.opus_bd.myapplication.Model.User.RegisterModel;
 import com.opus_bd.myapplication.Model.User.SubUnitsModel;
 import com.opus_bd.myapplication.Model.User.UnitModel;
@@ -52,6 +53,9 @@ public interface RetrofitService {
 
     @GET("global/api/GetAllDesignationForCID")
     Call<List<DesignationModel>> GetAllDesignationForCID();
+
+  @GET("global/api/RankListForCChat")
+  Call<List<RankModel>> RankListForCChat();
 
     @POST("Auth/Account/CChatRegister")
     Call<String> CChatRegister(@Body RegisterModel registerModel);

@@ -3,6 +3,7 @@ package com.opus_bd.myapplication.Activity.LOGREG;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -20,12 +21,14 @@ import com.opus_bd.myapplication.APIClient.RetrofitService;
 import com.opus_bd.myapplication.Activity.LoginActivity;
 import com.opus_bd.myapplication.Adapter.CustomAdapter;
 import com.opus_bd.myapplication.Model.User.DesignationModel;
+import com.opus_bd.myapplication.Model.User.RankModel;
 import com.opus_bd.myapplication.Model.User.RegisterModel;
 import com.opus_bd.myapplication.Model.User.SubUnitsModel;
 import com.opus_bd.myapplication.Model.User.UnitModel;
 import com.opus_bd.myapplication.R;
 import com.opus_bd.myapplication.Utils.SharedPrefManager;
 import com.opus_bd.myapplication.Utils.Utilities;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +63,14 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText etConfirmPassWord;
     @BindView(R.id.ivpassShow)
     ImageView ivpassShow;
+    @BindView(R.id.ivProfilePic)
+    ImageView ivProfilePic;
+
     boolean isPassChecked = true;
 
     ArrayList<UnitModel> unitModelArrayList = new ArrayList<>();
     ArrayList<SubUnitsModel> subUnitsModelArrayList = new ArrayList<>();
-    ArrayList<DesignationModel> designationModelArrayList = new ArrayList<>();
+    ArrayList<RankModel> rankModelArrayList = new ArrayList<>();
 
     public Integer SELECTED_UNIT_ID,SELECTED_SUB_UNIT_ID=null;
     String selectOne,SELECTED_DESIGNATION_NAME="";
@@ -192,33 +198,33 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void getAllDesignation() {
         RetrofitService retrofitService = RetrofitClientInstance.getRetrofitInstance().create(RetrofitService.class);
-        Call<List<DesignationModel>> listCall = retrofitService.GetAllDesignationForCID();
-        listCall.enqueue(new Callback<List<DesignationModel>>() {
+        Call<List<RankModel>> listCall = retrofitService.RankListForCChat();
+        listCall.enqueue(new Callback<List<RankModel>>() {
             @Override
-            public void onResponse(Call<List<DesignationModel>> call, Response<List<DesignationModel>> response) {
+            public void onResponse(Call<List<RankModel>> call, Response<List<RankModel>> response) {
 
                 if (response.body() != null) {
 
-                    designationModelArrayList.clear();
-                    designationModelArrayList.addAll(response.body());
+                    rankModelArrayList.clear();
+                    rankModelArrayList.addAll(response.body());
 
                     addAllDesignationSpinnerData(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<DesignationModel>> call, Throwable t) {
+            public void onFailure(Call<List<RankModel>> call, Throwable t) {
                 Toast.makeText(RegistrationActivity.this, "Fail to connect " + t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
-    public void addAllDesignationSpinnerData(final List<DesignationModel> body) {
+    public void addAllDesignationSpinnerData(final List<RankModel> body) {
         List<String> arrayList = new ArrayList<>();
         arrayList.add(0, "Select Rank");
         for (int i = 0; i < body.size(); i++) {
-            arrayList.add(i + 1, body.get(i).getDesignationNameBN());
+            arrayList.add(i + 1, body.get(i).getVehicleType());
         }
 
         CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), arrayList);
@@ -228,7 +234,7 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     if (i >= 1) {
-                        SELECTED_DESIGNATION_NAME = body.get(i - 1).getDesignationNameBN();
+                        SELECTED_DESIGNATION_NAME = body.get(i - 1).getVehicleType();
                     } else {
                         SELECTED_DESIGNATION_NAME = "";
                     }
@@ -342,6 +348,34 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+        } catch (Exception e) {
+            Utilities.showLogcatMessage("onActivityResult " + e.toString());
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                ivProfilePic.setImageURI(resultUri);
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Utilities.showLogcatMessage("ierror" + result.getError().getMessage());
+                Exception error = result.getError();
+            }
+        }
+    }
+
+
+    @OnClick(R.id.ivProfilePic)
+    public void ivFrontHead() {
+        CropImage.activity().start(RegistrationActivity.this);
     }
 
 

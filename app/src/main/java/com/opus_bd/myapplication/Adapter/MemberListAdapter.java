@@ -107,13 +107,14 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Tr
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ChatActivity.class);
-                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_ID, item.getUserId());
+                    intent.putExtra(ChatActivity.EXTRA_RECEIVER_ID, "1603299189");
                     Utilities.showLogcatMessage(" USER ID"+item.getId());
                     intent.putExtra(ChatActivity.EXTRA_RECEIVER_NAME, item.getEmpName());
                     intent.putExtra(ChatActivity.EXTRA_RECEIVER_PHOTO, item.getDivisionName());
                     context.startActivity(intent);
                 }
             });
+
           /*  btnSendMessage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

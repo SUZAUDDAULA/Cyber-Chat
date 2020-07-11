@@ -240,9 +240,9 @@ public class ChatActivity extends AppCompatActivity {
         intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select files"), 1);
-    }  @OnClick(R.id.ivEmoji)
+    }
+    @OnClick(R.id.ivEmoji)
     public void EmojiAttached() {
-
 
         /*ivEmoji.setKeyboardListener(new EmojIconActions.KeyboardListener() {
             @Override

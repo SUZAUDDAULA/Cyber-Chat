@@ -29,7 +29,7 @@
                 android:id="@+id/textViewOTP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_margin="0dp"
                 android:gravity="center"
                 android:text="Registration Process"
                 android:textColor="@android:color/holo_red_dark"
@@ -55,6 +55,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+                        <LinearLayout
+                            android:id="@+id/llPP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
+                            <com.mikhaellopez.circularimageview.CircularImageView
+                                android:id="@+id/ivProfilePic"
+                                android:layout_width="120dp"
+                                android:layout_height="120dp"
+                                android:src="@drawable/ic_human_db"
+                                android:foregroundGravity="center_vertical"/>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/llPP"
+                            android:gravity="center">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_below="@+id/ivProfilePic"
+                                android:text="Photo"/>
+                        </LinearLayout>
+
+                    </RelativeLayout>
 
                     <RelativeLayout
                         android:id="@+id/rrNAME"
